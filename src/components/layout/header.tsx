@@ -1,12 +1,9 @@
 "use client";
 
-import * as React from "react";
-import { Bell, Search, Moon, Sun, Menu } from "lucide-react";
-
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import React from "react";
+import { Bell, Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,166 +13,88 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-interface HeaderProps {
-  onMobileMenuToggle?: () => void;
+interface QuickStat {
+  value: string;
+  label: string;
 }
 
-export function Header({ onMobileMenuToggle }: HeaderProps) {
-  const [isDark, setIsDark] = React.useState(false);
-  const [hasNotifications] = React.useState(true);
+interface HeaderProps {
+  quickStats?: QuickStat[];
+}
 
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-    document.documentElement.classList.toggle("dark");
-  };
+export function Header({ quickStats }: HeaderProps) {
+  const defaultStats: QuickStat[] = [
+    { value: "47", label: "Campaigns" },
+    { value: "12.8K", label: "Subscribers" },
+    { value: "28.4%", label: "Open Rate" },
+  ];
+
+  const stats = quickStats || defaultStats;
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 md:px-6">
-      {/* Mobile Menu Button */}
-      <Button
-        variant="ghost"
-        size="icon"
-        className="md:hidden"
-        onClick={onMobileMenuToggle}
-      >
-        <Menu className="h-5 w-5" />
-      </Button>
-
-      {/* Search Bar */}
-      <div className="flex-1 max-w-md mx-4 hidden sm:block">
-        <div className="relative">
-          <Input
-            placeholder="Search campaigns, contacts..."
-            icon={<Search className="h-4 w-4" />}
-            className="w-full bg-muted/50 border-0 focus-visible:ring-1"
-          />
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between bg-white/80 backdrop-blur-md px-6 border-b border-gray-100">
+      {/* Left side - Quick Stats */}
+      <div className="flex items-center gap-6">
+        <div className="flex items-center bg-gray-50 rounded-xl px-4 py-2 gap-4">
+          {stats.map((stat, index) => (
+            <React.Fragment key={stat.label}>
+              <div className="text-center">
+                <div className="text-sm font-semibold text-gray-900">{stat.value}</div>
+                <div className="text-xs text-gray-500">{stat.label}</div>
+              </div>
+              {index < stats.length - 1 && (
+                <div className="h-8 w-px bg-gray-200" />
+              )}
+            </React.Fragment>
+          ))}
         </div>
       </div>
 
-      {/* Right Section */}
-      <div className="flex items-center gap-2">
-        {/* Mobile Search */}
-        <Button variant="ghost" size="icon" className="sm:hidden">
-          <Search className="h-5 w-5" />
-        </Button>
-
-        {/* Theme Toggle */}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleTheme}
-          className="text-muted-foreground hover:text-foreground"
-        >
-          {isDark ? (
-            <Sun className="h-5 w-5" />
-          ) : (
-            <Moon className="h-5 w-5" />
-          )}
-        </Button>
-
+      {/* Right side - Actions */}
+      <div className="flex items-center gap-3">
         {/* Notifications */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="relative text-muted-foreground hover:text-foreground"
-            >
-              <Bell className="h-5 w-5" />
-              {hasNotifications && (
-                <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-primary animate-pulse" />
-              )}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-80">
-            <DropdownMenuLabel className="font-semibold">
-              Notifications
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <div className="max-h-96 overflow-auto">
-              <DropdownMenuItem className="flex flex-col items-start gap-1 py-3 cursor-pointer">
-                <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-primary" />
-                  <span className="font-medium text-sm">Campaign Sent</span>
-                </div>
-                <span className="text-xs text-muted-foreground pl-4">
-                  Product Update - December was sent to 38,234 contacts
-                </span>
-                <span className="text-xs text-muted-foreground pl-4">
-                  2 hours ago
-                </span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex flex-col items-start gap-1 py-3 cursor-pointer">
-                <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-success" />
-                  <span className="font-medium text-sm">New Subscribers</span>
-                </div>
-                <span className="text-xs text-muted-foreground pl-4">
-                  234 new subscribers joined today
-                </span>
-                <span className="text-xs text-muted-foreground pl-4">
-                  5 hours ago
-                </span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex flex-col items-start gap-1 py-3 cursor-pointer">
-                <div className="flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-warning" />
-                  <span className="font-medium text-sm">A/B Test Complete</span>
-                </div>
-                <span className="text-xs text-muted-foreground pl-4">
-                  Subject Line Optimization finished with 45.2% open rate
-                </span>
-                <span className="text-xs text-muted-foreground pl-4">
-                  1 day ago
-                </span>
-              </DropdownMenuItem>
-            </div>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="justify-center text-primary font-medium cursor-pointer">
-              View all notifications
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Button variant="ghost" size="icon" className="relative h-10 w-10 rounded-xl text-gray-500 hover:text-gray-700 hover:bg-gray-100">
+          <Bell className="h-5 w-5" strokeWidth={1.75} />
+          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white" />
+        </Button>
+
+        {/* Search */}
+        <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl text-gray-500 hover:text-gray-700 hover:bg-gray-100">
+          <Search className="h-5 w-5" strokeWidth={1.75} />
+        </Button>
 
         {/* User Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="relative h-9 w-9 rounded-full p-0 ml-2"
-            >
-              <Avatar className="h-9 w-9 border-2 border-primary/20">
-                <AvatarImage src="https://ui-avatars.com/api/?name=Alex+Morgan&background=7c3aed&color=fff" />
-                <AvatarFallback className="bg-primary text-primary-foreground">
-                  AM
-                </AvatarFallback>
-              </Avatar>
+            <Button variant="ghost" className="flex items-center gap-3 h-10 pl-3 pr-2 rounded-xl hover:bg-gray-100">
+              <div className="text-right hidden sm:block">
+                <p className="text-sm font-medium text-gray-900">ravi</p>
+                <p className="text-xs text-gray-500">Admin</p>
+              </div>
+              <div className="relative">
+                <Avatar className="h-8 w-8 ring-2 ring-violet-100">
+                  <AvatarImage src="" alt="User avatar" />
+                  <AvatarFallback className="bg-gradient-to-br from-violet-500 to-pink-500 text-white text-sm font-medium">
+                    R
+                  </AvatarFallback>
+                </Avatar>
+                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-green-500 ring-2 ring-white" />
+              </div>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">Alex Morgan</p>
-                <p className="text-xs leading-none text-muted-foreground">
-                  alex@globopersona.com
-                </p>
+                <p className="text-sm font-medium">ravi</p>
+                <p className="text-xs text-muted-foreground">ravi@globopersona.com</p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer">
-              Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
-              Billing
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
-              Team
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
-              Settings
-            </DropdownMenuItem>
+            <DropdownMenuItem>Profile Settings</DropdownMenuItem>
+            <DropdownMenuItem>Account Settings</DropdownMenuItem>
+            <DropdownMenuItem>Billing</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer text-red-500 focus:text-red-500">
+            <DropdownMenuItem className="text-red-600">
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -184,4 +103,3 @@ export function Header({ onMobileMenuToggle }: HeaderProps) {
     </header>
   );
 }
-

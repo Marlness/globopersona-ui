@@ -1,435 +1,417 @@
-// Mock data for the email marketing platform
-
-export interface Campaign {
-  id: string;
-  name: string;
-  subject: string;
-  status: "draft" | "scheduled" | "active" | "paused" | "completed";
-  type: "email" | "automation" | "a/b-test";
-  recipients: number;
-  sent: number;
-  opens: number;
-  clicks: number;
-  openRate: number;
-  clickRate: number;
-  createdAt: string;
-  scheduledFor?: string;
-  sentAt?: string;
-}
-
-export interface Contact {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  phone?: string;
-  company?: string;
-  status: "subscribed" | "unsubscribed" | "bounced" | "pending";
-  tags: string[];
-  lists: string[];
-  createdAt: string;
-  lastActivity?: string;
-}
-
-export interface EmailList {
-  id: string;
-  name: string;
-  description?: string;
-  contactCount: number;
-  createdAt: string;
-}
-
-export interface DashboardStats {
-  totalContacts: number;
-  activeContacts: number;
-  totalCampaigns: number;
-  totalSent: number;
-  avgOpenRate: number;
-  avgClickRate: number;
-  monthlyGrowth: number;
-  recentActivity: ActivityItem[];
-}
-
-export interface ActivityItem {
-  id: string;
-  type: "campaign_sent" | "contact_added" | "contact_subscribed" | "campaign_completed";
-  title: string;
-  description: string;
-  timestamp: string;
-}
-
-export interface ChartData {
-  name: string;
-  sent: number;
-  opens: number;
-  clicks: number;
-}
-
-// Mock Campaigns
-export const campaigns: Campaign[] = [
-  {
-    id: "1",
-    name: "Black Friday Sale 2024",
-    subject: "🎉 Biggest Sale of the Year - Up to 70% OFF!",
-    status: "completed",
-    type: "email",
-    recipients: 45230,
-    sent: 45120,
-    opens: 18934,
-    clicks: 4521,
-    openRate: 41.9,
-    clickRate: 10.0,
-    createdAt: "2024-11-15T10:00:00Z",
-    sentAt: "2024-11-24T08:00:00Z",
-  },
-  {
-    id: "2",
-    name: "Holiday Newsletter",
-    subject: "Season's Greetings from Globopersona ✨",
-    status: "scheduled",
-    type: "email",
-    recipients: 52100,
-    sent: 0,
-    opens: 0,
-    clicks: 0,
-    openRate: 0,
-    clickRate: 0,
-    createdAt: "2024-12-01T14:30:00Z",
-    scheduledFor: "2024-12-20T09:00:00Z",
-  },
-  {
-    id: "3",
-    name: "Welcome Series",
-    subject: "Welcome to Globopersona! Here's what to expect",
-    status: "active",
-    type: "automation",
-    recipients: 8450,
-    sent: 7234,
-    opens: 5412,
-    clicks: 2156,
-    openRate: 74.8,
-    clickRate: 29.8,
-    createdAt: "2024-06-01T12:00:00Z",
-  },
-  {
-    id: "4",
-    name: "Product Update - December",
-    subject: "New features you'll love 🚀",
-    status: "active",
-    type: "email",
-    recipients: 38500,
-    sent: 38234,
-    opens: 14123,
-    clicks: 3845,
-    openRate: 36.9,
-    clickRate: 10.1,
-    createdAt: "2024-12-05T16:00:00Z",
-    sentAt: "2024-12-06T10:00:00Z",
-  },
-  {
-    id: "5",
-    name: "Re-engagement Campaign",
-    subject: "We miss you! Come back for 20% off",
-    status: "paused",
-    type: "automation",
-    recipients: 12340,
-    sent: 5670,
-    opens: 1234,
-    clicks: 456,
-    openRate: 21.8,
-    clickRate: 8.0,
-    createdAt: "2024-10-15T09:00:00Z",
-  },
-  {
-    id: "6",
-    name: "A/B Test: Subject Line Optimization",
-    subject: "Variant A: Shop Now | Variant B: Limited Time Offer",
-    status: "completed",
-    type: "a/b-test",
-    recipients: 10000,
-    sent: 9980,
-    opens: 4512,
-    clicks: 1234,
-    openRate: 45.2,
-    clickRate: 12.4,
-    createdAt: "2024-11-28T11:00:00Z",
-    sentAt: "2024-11-29T09:00:00Z",
-  },
-  {
-    id: "7",
-    name: "Cyber Monday Flash Sale",
-    subject: "⚡ 24 Hours Only - Extra 30% Off Everything",
-    status: "completed",
-    type: "email",
-    recipients: 48000,
-    sent: 47850,
-    opens: 21045,
-    clicks: 6890,
-    openRate: 44.0,
-    clickRate: 14.4,
-    createdAt: "2024-11-26T07:00:00Z",
-    sentAt: "2024-12-02T06:00:00Z",
-  },
-  {
-    id: "8",
-    name: "New Year Campaign",
-    subject: "New Year, New You - Start 2025 Right!",
-    status: "draft",
-    type: "email",
-    recipients: 0,
-    sent: 0,
-    opens: 0,
-    clicks: 0,
-    openRate: 0,
-    clickRate: 0,
-    createdAt: "2024-12-08T15:00:00Z",
-  },
-];
-
-// Mock Contacts
-export const contacts: Contact[] = [
-  {
-    id: "1",
-    email: "john.doe@example.com",
-    firstName: "John",
-    lastName: "Doe",
-    phone: "+1 (555) 123-4567",
-    company: "Acme Corp",
-    status: "subscribed",
-    tags: ["vip", "newsletter"],
-    lists: ["Main List", "VIP Customers"],
-    createdAt: "2024-01-15T08:00:00Z",
-    lastActivity: "2024-12-06T14:30:00Z",
-  },
-  {
-    id: "2",
-    email: "jane.smith@company.io",
-    firstName: "Jane",
-    lastName: "Smith",
-    phone: "+1 (555) 234-5678",
-    company: "Tech Solutions",
-    status: "subscribed",
-    tags: ["newsletter", "product-updates"],
-    lists: ["Main List"],
-    createdAt: "2024-02-20T10:30:00Z",
-    lastActivity: "2024-12-05T09:15:00Z",
-  },
-  {
-    id: "3",
-    email: "robert.johnson@email.org",
-    firstName: "Robert",
-    lastName: "Johnson",
-    company: "Johnson & Co",
-    status: "subscribed",
-    tags: ["vip"],
-    lists: ["VIP Customers", "Enterprise"],
-    createdAt: "2024-03-10T14:00:00Z",
-    lastActivity: "2024-12-04T16:45:00Z",
-  },
-  {
-    id: "4",
-    email: "sarah.williams@gmail.com",
-    firstName: "Sarah",
-    lastName: "Williams",
-    status: "subscribed",
-    tags: ["newsletter"],
-    lists: ["Main List"],
-    createdAt: "2024-04-05T11:20:00Z",
-    lastActivity: "2024-12-03T08:00:00Z",
-  },
-  {
-    id: "5",
-    email: "michael.brown@outlook.com",
-    firstName: "Michael",
-    lastName: "Brown",
-    phone: "+1 (555) 345-6789",
-    company: "Brown Industries",
-    status: "unsubscribed",
-    tags: [],
-    lists: [],
-    createdAt: "2024-05-12T09:45:00Z",
-    lastActivity: "2024-11-20T12:00:00Z",
-  },
-  {
-    id: "6",
-    email: "emily.davis@startup.co",
-    firstName: "Emily",
-    lastName: "Davis",
-    phone: "+1 (555) 456-7890",
-    company: "StartupCo",
-    status: "subscribed",
-    tags: ["newsletter", "beta-tester"],
-    lists: ["Main List", "Beta Testers"],
-    createdAt: "2024-06-08T16:30:00Z",
-    lastActivity: "2024-12-06T10:20:00Z",
-  },
-  {
-    id: "7",
-    email: "david.wilson@enterprise.com",
-    firstName: "David",
-    lastName: "Wilson",
-    phone: "+1 (555) 567-8901",
-    company: "Enterprise Solutions",
-    status: "subscribed",
-    tags: ["vip", "enterprise"],
-    lists: ["Enterprise", "VIP Customers"],
-    createdAt: "2024-07-22T13:15:00Z",
-    lastActivity: "2024-12-05T15:40:00Z",
-  },
-  {
-    id: "8",
-    email: "lisa.martinez@freelance.io",
-    firstName: "Lisa",
-    lastName: "Martinez",
-    status: "pending",
-    tags: [],
-    lists: ["Pending Confirmation"],
-    createdAt: "2024-12-05T08:00:00Z",
-  },
-  {
-    id: "9",
-    email: "james.anderson@mail.com",
-    firstName: "James",
-    lastName: "Anderson",
-    status: "bounced",
-    tags: [],
-    lists: [],
-    createdAt: "2024-08-14T10:00:00Z",
-    lastActivity: "2024-09-01T00:00:00Z",
-  },
-  {
-    id: "10",
-    email: "jennifer.taylor@business.org",
-    firstName: "Jennifer",
-    lastName: "Taylor",
-    phone: "+1 (555) 678-9012",
-    company: "Business Org",
-    status: "subscribed",
-    tags: ["newsletter", "webinar-attendee"],
-    lists: ["Main List", "Webinar Attendees"],
-    createdAt: "2024-09-30T14:45:00Z",
-    lastActivity: "2024-12-06T11:30:00Z",
-  },
-];
-
-// Mock Email Lists
-export const emailLists: EmailList[] = [
-  {
-    id: "1",
-    name: "Main List",
-    description: "Primary subscriber list for all marketing communications",
-    contactCount: 45230,
-    createdAt: "2023-01-01T00:00:00Z",
-  },
-  {
-    id: "2",
-    name: "VIP Customers",
-    description: "High-value customers with premium engagement",
-    contactCount: 2340,
-    createdAt: "2023-03-15T00:00:00Z",
-  },
-  {
-    id: "3",
-    name: "Enterprise",
-    description: "B2B enterprise clients",
-    contactCount: 890,
-    createdAt: "2023-06-20T00:00:00Z",
-  },
-  {
-    id: "4",
-    name: "Beta Testers",
-    description: "Early adopters and product testers",
-    contactCount: 1250,
-    createdAt: "2023-09-10T00:00:00Z",
-  },
-  {
-    id: "5",
-    name: "Webinar Attendees",
-    description: "Users who have attended product webinars",
-    contactCount: 3400,
-    createdAt: "2024-01-05T00:00:00Z",
-  },
-];
-
 // Dashboard Stats
-export const dashboardStats: DashboardStats = {
-  totalContacts: 52340,
-  activeContacts: 48920,
-  totalCampaigns: 156,
-  totalSent: 2450000,
-  avgOpenRate: 38.5,
-  avgClickRate: 12.3,
-  monthlyGrowth: 8.4,
-  recentActivity: [
-    {
-      id: "1",
-      type: "campaign_sent",
-      title: "Campaign Sent",
-      description: "Product Update - December was sent to 38,234 contacts",
-      timestamp: "2024-12-06T10:00:00Z",
-    },
-    {
-      id: "2",
-      type: "contact_subscribed",
-      title: "New Subscribers",
-      description: "234 new subscribers joined today",
-      timestamp: "2024-12-06T09:30:00Z",
-    },
-    {
-      id: "3",
-      type: "campaign_completed",
-      title: "Campaign Completed",
-      description: "A/B Test: Subject Line Optimization finished with 45.2% open rate",
-      timestamp: "2024-12-05T18:00:00Z",
-    },
-    {
-      id: "4",
-      type: "contact_added",
-      title: "Contacts Imported",
-      description: "1,500 contacts imported from CSV file",
-      timestamp: "2024-12-05T14:00:00Z",
-    },
-  ],
+export const dashboardStats = {
+  totalCampaigns: {
+    value: 47,
+    label: "Total Campaigns",
+    sublabel: "Active & completed",
+    change: "+12",
+    changeType: "increase" as const,
+    progress: 85,
+    color: "blue" as const,
+  },
+  activeSubscribers: {
+    value: "12,847",
+    label: "Active Subscribers",
+    sublabel: "Engaged users",
+    change: "+234",
+    changeType: "increase" as const,
+    progress: 92,
+    color: "purple" as const,
+  },
+  avgOpenRate: {
+    value: "28.4%",
+    label: "Avg Open Rate",
+    sublabel: "Last 30 days",
+    change: "+2.1%",
+    changeType: "increase" as const,
+    progress: 78,
+    color: "green" as const,
+  },
+  avgClickRate: {
+    value: "4.7%",
+    label: "Avg Click Rate",
+    sublabel: "Engagement metric",
+    change: "-0.3%",
+    changeType: "decrease" as const,
+    progress: 65,
+    color: "yellow" as const,
+  },
+  revenueGenerated: {
+    value: "$24,847",
+    label: "Revenue Generated",
+    sublabel: "From campaigns",
+    change: "+$1,247",
+    changeType: "increase" as const,
+    progress: 88,
+    color: "green" as const,
+  },
+  bounceRate: {
+    value: "2.3%",
+    label: "Bounce Rate",
+    sublabel: "Quality metric",
+    change: "-0.5%",
+    changeType: "decrease" as const,
+    progress: 23,
+    color: "red" as const,
+  },
 };
 
-// Chart Data for the last 7 days
-export const weeklyChartData: ChartData[] = [
-  { name: "Mon", sent: 12500, opens: 4875, clicks: 1500 },
-  { name: "Tue", sent: 18200, opens: 7098, clicks: 2184 },
-  { name: "Wed", sent: 15800, opens: 6162, clicks: 1896 },
-  { name: "Thu", sent: 22400, opens: 8736, clicks: 2688 },
-  { name: "Fri", sent: 38234, opens: 14911, clicks: 4588 },
-  { name: "Sat", sent: 8500, opens: 3315, clicks: 1020 },
-  { name: "Sun", sent: 6200, opens: 2418, clicks: 744 },
+// Email Lists
+export const emailLists = [
+  {
+    id: "1",
+    name: "test360marco",
+    description: "No description provided",
+    status: "active" as const,
+    quality: "poor" as const,
+    validContacts: 5,
+    openRate: 0,
+    valid: 5,
+    createdAt: "0m ago",
+    source: "RAVI SAMPLE 1.csv",
+    color: "blue" as const,
+  },
+  {
+    id: "2",
+    name: "final test",
+    description: "No description provided",
+    status: "active" as const,
+    quality: "poor" as const,
+    validContacts: 5,
+    openRate: 0,
+    valid: 5,
+    createdAt: "20h ago",
+    source: "test.csv",
+    color: "purple" as const,
+  },
+  {
+    id: "3",
+    name: "madhu",
+    description: "No description provided",
+    status: "active" as const,
+    quality: "poor" as const,
+    validContacts: 24,
+    openRate: 0,
+    valid: 24,
+    createdAt: "2d ago",
+    source: "test.csv",
+    color: "pink" as const,
+  },
+  {
+    id: "4",
+    name: "test vercel",
+    description: "No description provided",
+    status: "active" as const,
+    quality: "poor" as const,
+    validContacts: 24,
+    openRate: 0,
+    valid: 24,
+    createdAt: "3d ago",
+    source: "test.csv",
+    color: "cyan" as const,
+  },
 ];
 
-// Monthly performance data
-export const monthlyPerformanceData: ChartData[] = [
-  { name: "Jan", sent: 185000, opens: 72150, clicks: 22200 },
-  { name: "Feb", sent: 198000, opens: 77220, clicks: 23760 },
-  { name: "Mar", sent: 210000, opens: 81900, clicks: 25200 },
-  { name: "Apr", sent: 225000, opens: 87750, clicks: 27000 },
-  { name: "May", sent: 240000, opens: 93600, clicks: 28800 },
-  { name: "Jun", sent: 255000, opens: 99450, clicks: 30600 },
-  { name: "Jul", sent: 268000, opens: 104520, clicks: 32160 },
-  { name: "Aug", sent: 285000, opens: 111150, clicks: 34200 },
-  { name: "Sep", sent: 298000, opens: 116220, clicks: 35760 },
-  { name: "Oct", sent: 315000, opens: 122850, clicks: 37800 },
-  { name: "Nov", sent: 385000, opens: 150150, clicks: 46200 },
-  { name: "Dec", sent: 245000, opens: 95550, clicks: 29400 },
+// Email Lists Stats
+export const emailListsStats = {
+  totalLists: { value: 8, label: "Total Lists", sublabel: "Active campaigns", color: "blue" as const },
+  totalContacts: { value: 79, label: "Total Contacts", sublabel: "Valid contacts", color: "green" as const },
+  thisMonth: { value: "+60", label: "This Month", sublabel: "New additions", color: "purple" as const },
+  avgQuality: { value: "40%", label: "Avg. Quality", sublabel: "Data quality score", color: "yellow" as const },
+  openRate: { value: "0%", label: "Open Rate", sublabel: "Average opens", color: "pink" as const },
+  clickRate: { value: "0%", label: "Click Rate", sublabel: "Average clicks", color: "cyan" as const },
+};
+
+// Email Accounts
+export const emailAccounts = [
+  {
+    id: "1",
+    email: "madhu.k@globopersona.com",
+    name: "madhu",
+    provider: "SMTP/IMAP",
+    status: "active" as const,
+    verified: true,
+    sentToday: 0,
+    dailyLimit: 100,
+    lastUsed: null,
+  },
+  {
+    id: "2",
+    email: "test@globopersona.com",
+    name: "test",
+    provider: "SMTP/IMAP",
+    status: "active" as const,
+    verified: true,
+    sentToday: 0,
+    dailyLimit: 100,
+    lastUsed: null,
+  },
+  {
+    id: "3",
+    email: "kotlamadhu0614@gmail.com",
+    name: "madhu",
+    provider: "Gmail OAuth",
+    status: "active" as const,
+    verified: true,
+    sentToday: 0,
+    dailyLimit: 100,
+    lastUsed: "9/15/2025",
+  },
 ];
 
-// Available tags
-export const availableTags = [
-  "vip",
-  "newsletter",
-  "product-updates",
-  "beta-tester",
-  "enterprise",
-  "webinar-attendee",
-  "new-customer",
-  "returning-customer",
-  "inactive",
-  "promotional",
+// Email Account Stats
+export const emailAccountStats = {
+  activeAccounts: { value: 3, total: 3, label: "Active Accounts", color: "green" as const },
+  dailyLimit: { value: 300, label: "Daily Limit", sublabel: "emails per day", color: "blue" as const },
+  sentToday: { value: 0, label: "Sent Today", sublabel: "across all accounts", color: "purple" as const },
+  utilization: { value: "0%", label: "Utilization", sublabel: "of daily capacity", color: "pink" as const },
+};
+
+// Email Campaigns
+export const emailCampaigns = [
+  {
+    id: "1",
+    name: "land scaping",
+    description: "No description available",
+    status: "running" as const,
+    type: "ai" as const,
+    recipients: 5,
+    openRate: 0,
+    sent: 3,
+    opens: 0,
+    clicks: 0,
+    createdAt: "Just now",
+    list: null,
+    color: "blue" as const,
+  },
+  {
+    id: "2",
+    name: "test final",
+    description: "No description available",
+    status: "draft" as const,
+    type: "ai" as const,
+    recipients: 5,
+    openRate: 0,
+    sent: 0,
+    opens: 0,
+    clicks: 0,
+    createdAt: "Just now",
+    list: null,
+    color: "purple" as const,
+  },
+  {
+    id: "3",
+    name: "madhu hero",
+    description: "No description available",
+    status: "draft" as const,
+    type: "ai" as const,
+    recipients: 5,
+    openRate: 0,
+    sent: 0,
+    opens: 0,
+    clicks: 0,
+    createdAt: "Just now",
+    list: null,
+    color: "pink" as const,
+  },
+  {
+    id: "4",
+    name: "ravi kojja",
+    description: "No description available",
+    status: "completed" as const,
+    type: "ai" as const,
+    recipients: 5,
+    openRate: 120,
+    sent: 5,
+    opens: 6,
+    clicks: 0,
+    createdAt: "Just now",
+    list: null,
+    color: "green" as const,
+  },
 ];
 
+// Campaign Stats
+export const campaignStats = {
+  totalCampaigns: { value: 12, label: "Total Campaigns", sublabel: "All campaigns", color: "blue" as const },
+  manualCampaigns: { value: 0, label: "Manual Campaigns", sublabel: "User created", color: "green" as const },
+  aiCampaigns: { value: 12, label: "AI Campaigns", sublabel: "AI personalized", color: "purple" as const },
+  totalRecipients: { value: 60, label: "Total Recipients", sublabel: "Email contacts", color: "pink" as const },
+  openRate: { value: "60%", label: "Open Rate", sublabel: "Opens (events)", color: "cyan" as const },
+  clickRate: { value: "0%", label: "Click Rate", sublabel: "Average clicks", color: "yellow" as const },
+};
+
+// Contacts
+export const contacts = [
+  {
+    id: "1",
+    email: "michael.leadflux@outlook.com",
+    firstName: "Michael",
+    lastName: "King",
+    jobTitle: "CFO",
+    company: "Schlouch Incorporated",
+    website: "schlouch.com",
+    phone: "Rich King",
+    address: "132 Excelsior Dr",
+    city: "Blandon",
+    state: "PA",
+    country: "United States",
+    zip: "19510",
+    industry: "Construction",
+    status: "active" as const,
+  },
+  {
+    id: "2",
+    email: "sarah.leadflux@outlook.com",
+    firstName: "Sarah",
+    lastName: "Hallquist",
+    jobTitle: "Chief Executive Officer",
+    company: "HPM, Inc.",
+    website: "hpmcontracting.com",
+    phone: "Ray Hallquist",
+    address: "9200 East Mineral Avenue",
+    city: "Englewood",
+    state: "CO",
+    country: "United States",
+    zip: "80112",
+    industry: "Construction",
+    status: "active" as const,
+  },
+  {
+    id: "3",
+    email: "christopher.leadflux@outlook.com",
+    firstName: "Christopher",
+    lastName: "Gerry",
+    jobTitle: "Chief Financial Officer",
+    company: "R. P. Marzilli & Company, Inc.",
+    website: "rpmarzilli.com",
+    phone: "Paula Gerry",
+    address: "21 Trotter Dr",
+    city: "Medway",
+    state: "MA",
+    country: "United States",
+    zip: "02053-2299",
+    industry: "Construction, R...",
+    status: "active" as const,
+  },
+  {
+    id: "4",
+    email: "ashley.leadflux@outlook.com",
+    firstName: "Ashley",
+    lastName: "Powers",
+    jobTitle: "Chief Financial Officer",
+    company: "Douglass Colony Group",
+    website: "douglasscolony.com",
+    phone: "Jaci Powers",
+    address: "5901 E 58th Ave",
+    city: "Commerce C...",
+    state: "CO",
+    country: "United States",
+    zip: "80022",
+    industry: "Construction",
+    status: "active" as const,
+  },
+  {
+    id: "5",
+    email: "emily.leadflux@outlook.com",
+    firstName: "Emily",
+    lastName: "Hasegawa",
+    jobTitle: "Principal, Chief Design Officer",
+    company: "ELS Architecture and Urban Design",
+    website: "elsarch.com",
+    phone: "Kenneth Hasegawa",
+    address: "2040 Addison St",
+    city: "Berkeley",
+    state: "CA",
+    country: "United States",
+    zip: "94704-1104",
+    industry: "Architecture & P...",
+    status: "active" as const,
+  },
+];
+
+// AI Email Pitches
+export const aiEmailPitches = [
+  {
+    id: "1",
+    contact: contacts[4], // Emily Hasegawa
+    subjectLine: "Exploring Synergies Between ELS and Whittlesey Landscape Supplies",
+    body: `Hi Emily,
+
+I hope this message finds you well! I recently came across ELS Architecture and Urban Design and was impressed by your commitment to enhancing urban spaces sustainably. Your work resonates with our mission at Whittlesey Landscape Supplies, where we've been providing high-quality landscaping products for over 45 years, focusing on customer service and quality.
+
+I believe there's an opportunity for us to collaborate, especially considering your projects likely require reliable landscaping materials. I'd love to invite you to share any upcoming supply needs for a quote or perhaps join me for lunch at our office to discuss our services further.
+
+Looking forward to the possibility of working together!
+
+Best regards,`,
+    confidence: 87,
+    tokens: 984,
+    status: "pending" as const,
+    tags: ["First Name", "Job Title", "Company Name", "Industry", "City Location", "State Location", "Address", "Country", "ZIP Code", "Phone Number", "Website", "Company Services", "Technology Stack", "Recent Activity", "Company Description", "Website Research", "Emily's name", "Position as Chief Design Officer", "Company name ELS Architecture and Urban Design", "Emphasis on sustainability and urban design"],
+  },
+  {
+    id: "2",
+    contact: contacts[0], // Michael King
+    subjectLine: "Let's Build Something Together at Schlouch Incorporated",
+    body: `Hi Michael,
+
+I hope this message finds you well! I came across Schlouch Incorporated and was truly impressed by your commitment to quality in the construction industry. As the CFO, I'm sure you're keen on innovative partnerships that enhance your project outcomes.
+
+At Whittlesey Landscape Supplies, we specialize in high-quality landscaping products with flexible terms and dedicated support. We'd love the opportunity to provide you with a quote tailored to your supplies list. If you're available, I'd also like to invite you to our office for lunch to review how we can support your upcoming projects.
+
+Looking forward to hearing from you soon!
+
+Best regards,`,
+    confidence: 85,
+    tokens: 766,
+    status: "pending" as const,
+    tags: ["First Name", "Job Title", "Company Name", "Industry", "City Location", "State Location", "Address", "Country", "ZIP Code", "Phone Number", "Website", "Michael's name", "CFO role", "Schlouch Incorporated's focus on quality"],
+  },
+  {
+    id: "3",
+    contact: contacts[1], // Sarah Hallquist
+    subjectLine: "Exploring Partnership Opportunities in Construction",
+    body: `Hi Sarah,
+
+I hope this message finds you well! I recently came across HPM, Inc. and was impressed by your innovative approach to construction, especially in a stunning area like Englewood. At Whittlesey Landscape Supplies, we understand that quality materials are essential for successful projects, and we pride ourselves on delivering just that.
+
+I'd love to explore how our landscaping products can complement your projects. We offer a 15-day credit period, free delivery, and the ability to return unused supplies—all supported by a dedicated account manager available seven days a week.
+
+If you're open to it, I'd be thrilled to discuss your upcoming needs over lunch or review your supply list for a quote.
+
+Looking forward to hearing from you!
+
+Best regards,`,
+    confidence: 85,
+    tokens: 803,
+    status: "pending" as const,
+    tags: ["First Name", "Job Title", "Company Name", "Industry", "City Location", "State Location", "Address", "Country", "ZIP Code", "Phone Number", "Website", "Sarah's name", "HPM, Inc. and its location in Englewood, CO"],
+  },
+];
+
+// AI Configuration
+export const aiConfiguration = {
+  companyInfo: "Whittlesey Landscape Supplies, founded in 1975, is a leading provider of high-quality landscaping products. With decades of experience in the industry, we understand the unique needs of landscaping contractors and the importance of using superior materials for successful projects.",
+  productService: "Comprehensive range of landscaping supplies including soil, fencing, plants, pavings, etc.",
+  targetAudience: "Landscaping contractors, property managers, and homeowners across Austin, TX.",
+  painPoints: "15 days credit period for payment, ability to exchange goods or return remaining supplies after project completion.",
+  tone: "Formal and friendly conversation aimed at building relationships.",
+  cta: "Encourage recipients to send their supplies list for a quote or visit the office for lunch and review offerings.",
+  valueProposition: "Referral bounce, 15 days credit period, free replacement, free delivery, and dedicated account executive 7 days round the clock on emails and calls.",
+};
+
+// Field Mapping Options
+export const fieldMappingOptions = [
+  { id: "email", label: "Email Address", description: "Primary email address (required)", required: true, icon: "mail" },
+  { id: "firstName", label: "First Name", description: "Contact's first name", required: false, icon: "user" },
+  { id: "lastName", label: "Last Name", description: "Contact's last name", required: false, icon: "user" },
+  { id: "title", label: "Title", description: "Job title or professional position", required: false, icon: "briefcase" },
+  { id: "company", label: "Company Name", description: "Company or organization name", required: false, icon: "building" },
+  { id: "website", label: "Website", description: "Company or personal website URL", required: false, icon: "globe" },
+  { id: "address", label: "Address", description: "Street address or full address", required: false, icon: "map-pin" },
+  { id: "city", label: "City", description: "City name", required: false, icon: "building" },
+  { id: "state", label: "State", description: "State or province", required: false, icon: "map" },
+  { id: "country", label: "Country", description: "Country name", required: false, icon: "flag" },
+  { id: "zip", label: "Zip Code", description: "ZIP or postal code", required: false, icon: "hash" },
+];
