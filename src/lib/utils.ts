@@ -62,3 +62,5 @@ export function truncate(text: string, length: number): string {
   return text.slice(0, length) + "...";
 }
 
+
+
